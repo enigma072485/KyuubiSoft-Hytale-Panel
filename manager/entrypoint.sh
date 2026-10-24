@@ -27,11 +27,17 @@ if [ "$(id -u)" = "0" ]; then
             groupadd -g "$DOCKER_GID" docker 2>/dev/null || true
         fi
 
-        # Add manager user to docker group (using usermod from shadow package)
-        usermod -aG docker manager 2>/dev/null || true
-        echo "[Manager] Added manager to docker group (GID: $DOCKER_GID)"
-    fi
+        # Add manager user to whatever group owns docker.sock
+        DOCKER_GROUP=$(getent group "$DOCKER_GID" | cut -d: -f1)
 
+        if [ -n "$DOCKER_GROUP" ]; then
+            usermod -aG "$DOCKER_GROUP" manager
+            echo "[Manager] Added manager to group $DOCKER_GROUP (GID: $DOCKER_GID)"
+        else
+            echo "[Manager] ERROR: Could not determine group for Docker GID $DOCKER_GID"
+            exit 1
+        fi
+    fi
     echo "[Manager] Switching to manager user (UID: $MANAGER_UID)..."
     # gosu properly handles supplementary groups
     exec gosu manager "$@"
