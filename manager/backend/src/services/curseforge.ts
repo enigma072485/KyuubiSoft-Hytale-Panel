@@ -416,7 +416,7 @@ async function curseforgeRequest<T>(
           if (res.statusCode === 200) {
             resolve(JSON.parse(data));
           } else if (res.statusCode === 403) {
-            logger.error('CurseForge API key invalid or access denied');
+            logger.error(`CurseForge API error ${res.statusCode}: ${data}`);
             resolve(null);
           } else if (res.statusCode === 429) {
             logger.error('CurseForge API rate limit exceeded');
