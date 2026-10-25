@@ -103,7 +103,7 @@ mkdir -p /opt/hytale/updater /opt/hytale/backups/native
 rmdir /opt/hytale/server/updater 2>/dev/null || true
 # Directories the server writes into. Created here, before the ownership pass
 # below, so they never stay root-owned.
-mkdir -p /opt/hytale/data/worlds /opt/hytale/plugins /opt/hytale/mods /opt/hytale/auth
+mkdir -p /opt/hytale/data/worlds /opt/hytale/earlyplugins /opt/hytale/plugins /opt/hytale/mods /opt/hytale/auth
 # The prefabs volume is bind-mounted at /opt/hytale/prefabs, but the server
 # looks for them under server/prefabs. Symlink it so the mount is actually used
 # (no-op when the volume isn't mounted).
@@ -127,7 +127,7 @@ fix_ownership() {
     fi
     local dirs=() dir fixed
     for dir in /opt/hytale/server /opt/hytale/data /opt/hytale/backups \
-               /opt/hytale/plugins /opt/hytale/mods /opt/hytale/prefabs \
+               /opt/hytale/plugins /opt/hytale/earlyplugins /opt/hytale/mods /opt/hytale/prefabs \
                /opt/hytale/downloader /opt/hytale/auth /opt/hytale/updater; do
         [ -d "$dir" ] && dirs+=("$dir")
     done
@@ -750,6 +750,9 @@ fi
 
 mkdir -p /opt/hytale/plugins
 ln -sfn /opt/hytale/plugins /opt/hytale/server/plugins 2>/dev/null || true
+
+mkdir -p /opt/hytale/earlyplugins
+ln -sfn /opt/hytale/earlyplugins /opt/hytale/server/earlyplugins || true
 
 mkdir -p /opt/hytale/mods
 ln -sfn /opt/hytale/mods /opt/hytale/server/mods 2>/dev/null || true
