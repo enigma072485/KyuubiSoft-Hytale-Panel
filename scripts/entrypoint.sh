@@ -265,7 +265,9 @@ done
 # ============================================================
 echo "[INFO] Checking server files..."
 
-SERVER_JAR="/opt/hytale/server/HytaleServer.jar"
+SERVER_JAR_NAME="${SERVER_JAR:-HytaleServer.jar}"
+SERVER_JAR="/opt/hytale/server/${SERVER_JAR_NAME}"
+echo "[DEBUG] Using SERVER_JAR=${SERVER_JAR}"
 ASSETS_FILE="/opt/hytale/server/Assets.zip"
 DOWNLOADER_DIR="/opt/hytale/downloader"
 CREDENTIALS_FILE="${DOWNLOADER_DIR}/.hytale-downloader-credentials.json"
