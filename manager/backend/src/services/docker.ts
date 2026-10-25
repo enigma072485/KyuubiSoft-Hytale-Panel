@@ -319,7 +319,15 @@ async function ensureStdinAttached(serverId?: string): Promise<{ ok: boolean; ke
   // concurrent stdin attaches.
   const key = await resolveServerId(serverId);
   const existing = stdinStreams.get(key);
-  if (existing) return { ok: true, key };
+  
+
+  if (existing) {
+    console.log(`REUSING STDIN STREAM: ${key}`);
+    return { ok: true, key };
+  }
+
+  console.log(`ATTACHING NEW STDIN STREAM: ${key}`);
+  
   try {
     const container = await getContainer(serverId);
     if (!container) return { ok: false, key };
@@ -352,6 +360,8 @@ export async function execCommand(command: string, serverId?: string): Promise<A
   // after every caller has filled in its placeholders, so an embedded line
   // break (a second, unchecked console command) or a TTY control byte (Ctrl-C
   // shuts the server down) is rejected here no matter which path built it.
+  console.log('RAW COMMAND:', JSON.stringify(command));
+  
   const validation = validateCommand(command);
   if (!validation.valid) {
     // JSON.stringify keeps a smuggled line break from forging log lines.
@@ -384,6 +394,8 @@ export async function sendLifecycleCommand(
 // lands in the terminal's output, not its input, so it reported success for
 // commands that never ran. A missing console is now reported as an error.
 async function writeConsoleLine(command: string, serverId?: string): Promise<ActionResponse> {
+  
+  console.log('WRITING TO STDIN:', JSON.stringify(command));
   if (isDemoMode()) {
     return { success: true, message: `[DEMO] Command executed: ${command}` };
   }
