@@ -103,6 +103,13 @@ export function getRoots(): FileManagerRoot[] {
       label: 'Mods',
     },
     {
+      id: 'earlyplugins',
+      path: config.earlyPluginsPath,
+      rw: true,
+      permission: 'files.write',
+      label: 'Early Plugins',
+    },
+    {
       id: 'plugins',
       path: config.pluginsPath,
       rw: true,
