@@ -212,6 +212,8 @@ const ALLOWED_COMMAND_PREFIXES = [
   '/pardon',
   '/mute',
   '/unmute',
+  '/lp',
+  '/luckperms',
   // Communication
   '/say',
   '/tell',
@@ -252,6 +254,7 @@ const ALLOWED_COMMAND_PREFIXES = [
   '/version',
   '/tps',
   '/status',
+  '/server',
   // Whitelist
   '/whitelist',
   // Op management (admin only)
